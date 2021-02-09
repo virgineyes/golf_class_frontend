@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img id="logo" alt="logo" src="./assets/logo.png">
+    <SelectTool/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SelectTool from './components/SelectTool.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    SelectTool
   }
 }
 </script>
@@ -23,6 +23,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
+}
+
+@media (max-width: 767px) {
+  #logo {
+    width: 100%;
+    height: 100%;
+  }
+}
+@media (min-width: 768px) {
+  #logo {
+    width: 600px;
+    height: 400px;
+  }
 }
 </style>
