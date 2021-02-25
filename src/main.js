@@ -14,8 +14,8 @@ Vue.config.productionTip = false
 
 Vue.prototype.$buildAxiosInstance = () => {
   return axios.create({
-    baseURL: 'http://localhost:3050/',
-    // baseURL: 'https://golf-class-backend.herokuapp.com/',
+    // baseURL: 'http://localhost:3050/',
+    baseURL: 'https://golf-class-backend.herokuapp.com/',
     headers: {
       'Content-Type': 'application/json'
     }
