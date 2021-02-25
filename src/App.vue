@@ -2,6 +2,7 @@
   <div id="app">
     <img id="logo" alt="logo" src="./assets/logo.png">
     <SelectTool/>
+     <v-dialog />
   </div>
 </template>
 

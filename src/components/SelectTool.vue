@@ -13,18 +13,18 @@
       <div id="box">
         <div v-for="course in courses_sat" :key="course.id">
           <label><font-awesome-icon icon="golf-ball" /> {{course.classDate}} ({{course.weekDate}}) - {{course.coach}} (剩餘：{{course.remindAccount}}）</label>
-          <input type="checkbox" v-model="checked" :value="course"/>
+          <input type="checkbox" v-model="checkList" :value="course" @change="check()"/>
         </div>
       </div>
       <div id="box">
         <div v-for="course in courses_sun" :key="course.id">
           <label><font-awesome-icon icon="golf-ball" /> {{course.classDate}} ({{course.weekDate}}) - {{course.coach}} (剩餘：{{course.remindAccount}}）</label>
-          <input type="checkbox" v-model="checked" :value="course">
+          <input type="checkbox" v-model="checkList" :value="course" @change="check()">
         </div>
       </div>
     </div>
     <h6>
-      <el-button type="success" plain>報名送出</el-button>
+      <el-button type="success" :disabled="!confirm_disabled">報名送出</el-button>
     </h6>
   </div>
 </template>
@@ -35,6 +35,7 @@ export default {
     return {
       msg: '無尾熊＆老鷹球場報名表',
       name: '',
+      checkList: [],
       checked: [],
       courses_sat: [],
       courses_sun: []
@@ -48,16 +49,29 @@ export default {
       vueInstance.courses_sat = response.data._embedded.golfClassResources
     }).catch(error => {
         console.log(error)
-        // vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+        vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
     })
     axiosInstance.get('/golf/getAll/Sun/').then(response => {
       console.log(response.data._embedded.golfClassResources)
       vueInstance.courses_sun = response.data._embedded.golfClassResources
     }).catch(error => {
         console.log(error)
-        // vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+        vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
     })
   },
+  computed: {
+    confirm_disabled() {
+      return this.checkList.length > 1  && this.checkList.length < 5
+    }
+  },
+  methods: {
+    check() {
+      console.log(this.checkList.length)
+      if (this.checkList.length > 4) {
+        this.$showErrorDialog(this, "至多選取4次")
+      }
+    }
+  }
 }
 </script>
 
