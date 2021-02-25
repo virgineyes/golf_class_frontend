@@ -1,12 +1,12 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <span class="flex-container">3/1(一)中午12:00開放登記(每人至少2次、至多4次); 若欲下場超過4次者，如有餘額，可於第二階段登記,，第二階段開放登記時間為3/3(三)中午12:00</span>
-    <span class="flex-container">*春季班費用已包含2次實戰課費用，登記超過2次者，每次費用為2600元(含大九洞果嶺費)。</span>
+    <p>3/1(一)中午12:00開放登記(每人至少2次、至多4次); 若欲下場超過4次者，如有餘額，可於第二階段登記,，第二階段開放登記時間為3/3(三)中午12:00</p>
+    <p>*春季班費用已包含2次實戰課費用，登記超過2次者，每次費用為2600元(含大九洞果嶺費)。</p>
     
-    <div class="flex-container">
+    <div >
       <span>姓名：</span>
-      <el-input class="flex-container" v-model="input" placeholder="請輸入姓名"></el-input>
+      <el-input class="flex-container" v-model="name" placeholder="請輸入姓名"></el-input>
     </div>
     
     <div class="flex-container">
@@ -32,8 +32,9 @@
 <script>
 export default {
   data() {
-  return {
+    return {
       msg: '無尾熊＆老鷹球場報名表',
+      name: '',
       checked: [],
       courses_sat: [
         {
