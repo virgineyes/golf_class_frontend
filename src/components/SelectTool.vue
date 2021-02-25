@@ -12,14 +12,14 @@
     <div class="flex-container">
       <div id="box">
         <div v-for="course in courses_sat" :key="course.id">
-          <label><font-awesome-icon icon="golf-ball" /> {{course.date}} ({{course.weekDate}}) - {{course.coach}}</label>
+          <label><font-awesome-icon icon="golf-ball" /> {{course.classDate}} ({{course.weekDate}}) - {{course.coach}} (剩餘：{{course.remindAccount}}）</label>
           <input type="checkbox" v-model="checked" :value="course"/>
         </div>
       </div>
       <div id="box">
         <div v-for="course in courses_sun" :key="course.id">
-          <label><font-awesome-icon icon="golf-ball" /> {{course.date}} ({{course.weekDate}}) - {{course.coach}}</label>
-          <input type="checkbox" v-model="checked" :value="course"/>
+          <label><font-awesome-icon icon="golf-ball" /> {{course.classDate}} ({{course.weekDate}}) - {{course.coach}} (剩餘：{{course.remindAccount}}）</label>
+          <input type="checkbox" v-model="checked" :value="course">
         </div>
       </div>
     </div>
@@ -36,95 +36,27 @@ export default {
       msg: '無尾熊＆老鷹球場報名表',
       name: '',
       checked: [],
-      courses_sat: [
-        {
-          id: '1',
-          date: '3月6日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '3',
-          date: '3月20日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '5',
-          date: '3月27日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '7',
-          date: '4月10日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '9',
-          date: '4月24日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '11',
-          date: '5月1日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-        {
-          id: '13',
-          date: '5月22日',
-          weekDate: '六',
-          coach: 'Peter'
-        },
-      ],
-      courses_sun: [
-        {
-          id: '2',
-          date: '3月7日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '4',
-          date: '3月21日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '6',
-          date: '3月28日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '8',
-          date: '4月11日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '10',
-          date: '4月25日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '12',
-          date: '5月2日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-        {
-          id: '14',
-          date: '5月23日',
-          weekDate: '日',
-          coach: 'Max'
-        },
-      ]
+      courses_sat: [],
+      courses_sun: []
     }
+  },
+  created() {
+    var vueInstance = this
+    const axiosInstance = vueInstance.$buildAxiosInstance()
+    axiosInstance.get('/golf/getAll/Sat/').then(response => {
+      console.log(response.data._embedded.golfClassResources)
+      vueInstance.courses_sat = response.data._embedded.golfClassResources
+    }).catch(error => {
+        console.log(error)
+        // vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+    })
+    axiosInstance.get('/golf/getAll/Sun/').then(response => {
+      console.log(response.data._embedded.golfClassResources)
+      vueInstance.courses_sun = response.data._embedded.golfClassResources
+    }).catch(error => {
+        console.log(error)
+        // vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+    })
   },
 }
 </script>
@@ -138,7 +70,7 @@ export default {
   #box {
     text-align: left;
     padding: 0 0 0 50px;
-    width: 180px;
+    width: 300px;
     margin: 15px;
   }
 
