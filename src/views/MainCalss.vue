@@ -34,10 +34,11 @@
       axiosInstance.get('/golf/getAll/').then(response => {
         response.data._embedded.golfClassResources.forEach(golfClass => {
           golfClass.registrations.forEach(registration => {
-            golfClass.registrationName = registration.name
-            golfClass.registrationUuid = registration.uuid
-            golfClass.registrationcreated = moment(registration.created).format("YYYY-MM-DD HH:mm:ss")
-            vueInstance.registrations.push(golfClass)
+            var data = Object.assign({}, golfClass);
+            data.registrationName = registration.name
+            data.registrationUuid = registration.uuid
+            data.registrationcreated = moment(registration.created).format("YYYY-MM-DD HH:mm:ss")
+            vueInstance.registrations.push(data)
           })
         });
         vueInstance.toggleLoading(false)
