@@ -3,6 +3,7 @@ import App from './App.vue'
 import axios from 'axios'
 import store from './store'
 import VModal from 'vue-js-modal'
+import router from './router'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faGolfBall } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -56,6 +57,7 @@ Vue.prototype.$showErrorDialog = (vueInstance, errorMessage) => {
 }
 
 new Vue({
+  router,
   store,
   render: h => h(App),
 }).$mount('#app')
