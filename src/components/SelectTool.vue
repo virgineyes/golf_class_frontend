@@ -105,11 +105,11 @@ export default {
               console.log(error)
               vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
           })
-          
+
         }).catch(error => {
           console.log(error)
           vueInstance.toggleLoading(false)
-          vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+          vueInstance.$showErrorDialog(vueInstance, "選課失敗，請重新選取")
         })
       }
     }
