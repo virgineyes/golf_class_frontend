@@ -91,6 +91,7 @@ export default {
           vueInstance.$showDialog(vueInstance, response.data.content)
         }).catch(error => {
           console.log(error)
+          vueInstance.toggleLoading(false)
           vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
         })
       }
