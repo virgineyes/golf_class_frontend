@@ -2,15 +2,19 @@
   <div id="app">
     <img id="logo" alt="logo" src="./assets/logo.png">
     <SelectTool/>
-     <v-dialog />
+    <div v-loading.fullscreen.lock="loading"></div>
+    <v-dialog />
   </div>
 </template>
 
 <script>
 import SelectTool from './components/SelectTool.vue'
-
+import { mapGetters } from 'vuex';
 export default {
   name: 'App',
+  computed: mapGetters({
+    loading: 'getLoading'
+  }),
   components: {
     SelectTool
   }

@@ -24,12 +24,13 @@
       </div>
     </div>
     <h6>
-      <el-button type="success" :disabled="!confirm_disabled">報名送出</el-button>
+      <el-button type="success" @click="submit" :disabled="!confirm_disabled">報名送出</el-button>
     </h6>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -44,16 +45,16 @@ export default {
   created() {
     var vueInstance = this
     const axiosInstance = vueInstance.$buildAxiosInstance()
+    vueInstance.toggleLoading(true)
     axiosInstance.get('/golf/getAll/Sat/').then(response => {
-      console.log(response.data._embedded.golfClassResources)
       vueInstance.courses_sat = response.data._embedded.golfClassResources
-    }).catch(error => {
-        console.log(error)
-        vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-    })
-    axiosInstance.get('/golf/getAll/Sun/').then(response => {
-      console.log(response.data._embedded.golfClassResources)
-      vueInstance.courses_sun = response.data._embedded.golfClassResources
+      axiosInstance.get('/golf/getAll/Sun/').then(response => {
+        vueInstance.courses_sun = response.data._embedded.golfClassResources
+        vueInstance.toggleLoading(false)
+      }).catch(error => {
+          console.log(error)
+          vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+      })
     }).catch(error => {
         console.log(error)
         vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
@@ -65,10 +66,32 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+        'toggleLoading'
+    ]),
     check() {
-      console.log(this.checkList.length)
       if (this.checkList.length > 4) {
-        this.$showErrorDialog(this, "至多選取4次")
+        this.$showErrorDialog(this, "<b>至多選取4次</b>")
+      }
+    },
+    submit() {
+      var vueInstance = this
+      const axiosInstance = vueInstance.$buildAxiosInstance()
+      if (vueInstance.name == "" || this.name == undefined) {
+        vueInstance.$showErrorDialog(vueInstance, "<b>請輸入姓名</b>")
+      } else {
+        var data = []
+        vueInstance.checkList.forEach(temp => {
+          data.push(temp.uuid)
+        })
+        vueInstance.toggleLoading(true)
+        axiosInstance.put('/golf/update/' + vueInstance.name, JSON.stringify(data)).then(response => {
+          vueInstance.toggleLoading(false)
+          vueInstance.$showDialog(vueInstance, response.data.content)
+        }).catch(error => {
+          console.log(error)
+          vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+        })
       }
     }
   }
