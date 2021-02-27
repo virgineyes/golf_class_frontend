@@ -33,22 +33,7 @@ Vue.prototype.$showDialog = (vueInstance, message) => {
         {
           title: '確認',
           handler: () => {
-              vueInstance.$modal.hide('dialog');
-              const axiosInstance = vueInstance.$buildAxiosInstance()
-              vueInstance.toggleLoading(true)
-              axiosInstance.get('/golf/getAll/Sat/').then(response => {
-                vueInstance.courses_sat = response.data._embedded.golfClassResources
-                axiosInstance.get('/golf/getAll/Sun/').then(response => {
-                  vueInstance.courses_sun = response.data._embedded.golfClassResources
-                  vueInstance.toggleLoading(false)
-                }).catch(error => {
-                    console.log(error)
-                    vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-                })
-              }).catch(error => {
-                  console.log(error)
-                  vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-              })
+            vueInstance.$modal.hide('dialog');
           }
         }
       ]

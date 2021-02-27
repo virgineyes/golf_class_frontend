@@ -91,6 +91,21 @@ export default {
         axiosInstance.put('/golf/update/' + vueInstance.name, JSON.stringify(data)).then(response => {
           vueInstance.toggleLoading(false)
           vueInstance.$showDialog(vueInstance, response.data.content)
+
+          const axiosInstance = vueInstance.$buildAxiosInstance()
+          axiosInstance.get('/golf/getAll/Sat/').then(response => {
+            vueInstance.courses_sat = response.data._embedded.golfClassResources
+            axiosInstance.get('/golf/getAll/Sun/').then(response => {
+              vueInstance.courses_sun = response.data._embedded.golfClassResources
+            }).catch(error => {
+                console.log(error)
+                vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+            })
+          }).catch(error => {
+              console.log(error)
+              vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+          })
+          
         }).catch(error => {
           console.log(error)
           vueInstance.toggleLoading(false)
