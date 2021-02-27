@@ -62,7 +62,7 @@ export default {
   },
   computed: {
     confirm_disabled() {
-      return this.checkList.length > 1  && this.checkList.length < 5
+      return this.checkList.length < 5
     }
   },
   methods: {
@@ -84,6 +84,7 @@ export default {
         vueInstance.checkList.forEach(temp => {
           data.push(temp.uuid)
         })
+        vueInstance.checkList = []
         vueInstance.toggleLoading(true)
         axiosInstance.put('/golf/update/' + vueInstance.name, JSON.stringify(data)).then(response => {
           vueInstance.toggleLoading(false)
