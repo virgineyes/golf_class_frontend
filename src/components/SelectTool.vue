@@ -64,7 +64,7 @@ export default {
   },
   computed: {
     confirm_disabled() {
-      return this.checkList.length <= 1 && this.checkList.length < 5
+      return this.checkList.length >= 1 && this.checkList.length < 5
     }
   },
   methods: {
