@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SelectTool from '../views/SelectTool'
-import MainCalss from '../views/MainCalss'
+import Report from '../views/Report'
+import Maintain from '../views/Maintain'
 import PageNotFound from '../views/PageNotFound'
 
 Vue.use(VueRouter);
@@ -13,8 +14,12 @@ const routes = [
     component: SelectTool
   },
   {
-    path: '/taiwan/golf/maintain/backend',
-    component: MainCalss,
+    path: '/taiwan/golf/backend/report',
+    component: Report,
+  },
+  {
+    path: '/taiwan/golf/backend/maintain',
+    component: Maintain,
   },
   { path: "*", component: PageNotFound }
 ];

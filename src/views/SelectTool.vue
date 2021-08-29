@@ -47,20 +47,34 @@ export default {
     var vueInstance = this
     const axiosInstance = vueInstance.$buildAxiosInstance()
     vueInstance.toggleLoading(true)
-    axiosInstance.get('/golf/getAll/Sat/').then(response => {
-      vueInstance.courses_sat = response.data._embedded.golfClassResources
-      axiosInstance.get('/golf/getAll/Sun/').then(response => {
-        vueInstance.courses_sun = response.data._embedded.golfClassResources
-        vueInstance.toggleLoading(false)
-      }).catch(error => {
-          console.log(error)
-          vueInstance.toggleLoading(false)
-          vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+    axiosInstance.get('/golf/getAll/6/true').then(response => {
+      response.data._embedded.golfClassResources.forEach(c => {
+        c.weekDate = "六"
+        vueInstance.courses_sat.push(c)
       })
+      vueInstance.courses_sat = vueInstance.courses_sat.sort(function (a, b) {
+        return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
+      });
+      vueInstance.toggleLoading(false)
     }).catch(error => {
         console.log(error)
         vueInstance.toggleLoading(false)
         vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+    })
+
+    axiosInstance.get('/golf/getAll/0/true').then(response => {
+      response.data._embedded.golfClassResources.forEach(c => {
+        c.weekDate = "日"
+        vueInstance.courses_sun.push(c)
+      })
+      vueInstance.courses_sun = vueInstance.courses_sun.sort(function (a, b) {
+        return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
+      });
+      vueInstance.toggleLoading(false)
+    }).catch(error => {
+      console.log(error)
+      vueInstance.toggleLoading(false)
+      vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
     })
   },
   computed: {

@@ -1,7 +1,11 @@
 <template>
   <div>
-    <h1>後台維護</h1>
-    <div v-show="idRegistrations">
+    <h1>報表</h1>
+    <el-button type="primary" @click="router">前往後台維護</el-button>
+    <div v-show="!isRegistrations">
+      <h3>還沒有人報名</h3>
+    </div>
+    <div v-show="isRegistrations">
         <el-table :data="registrations" :default-sort="{prop: 'lastModified', order: 'descending'}" style="width: 100%" highlight-current-row border>
             <el-table-column min-width="50" prop="classDate" label="課程日期" sortable></el-table-column>
             <el-table-column min-width="50" prop="coach" label="教練" sortable></el-table-column>
@@ -49,7 +53,7 @@
       })
     },
     computed: {
-      idRegistrations() {
+      isRegistrations() {
         return this.registrations.length > 0
       }
     },
@@ -71,6 +75,9 @@
           vueInstance.toggleLoading(false)
           vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
         })
+      },
+      router() {
+        this.$router.push('maintain')
       }
     }
   }
