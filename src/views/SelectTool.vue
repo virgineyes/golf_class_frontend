@@ -2,7 +2,7 @@
   <div class="hello">
     <img id="logo" alt="logo" src="../assets/logo.png">
     <h1>{{ msg }}</h1>
-    <p style="color:red">9/6(一)中午 12:00 開放登記(每人至少 2 次、至多 4 次); 若欲下場超過 4 次者，如有餘額，可於第二階 段登記,，第二階段開放登記時間為 9/8(三)中午 12:00</p>
+    <p style="color:red">9/6(一)中午 12:00 開放登記(每人至少 2 次、至多 4 次); 若欲下場超過 4 次者，如有餘額，可於第二階段登記，第二階段開放登記時間為 9/8(三) 中午 12:00</p>
     <p>*秋季班費用已包含 2 次實戰課費用，登記超過 2 次者，每次費用為 2600 元(含大九洞果嶺費)</p>
     
     <div >
@@ -44,38 +44,7 @@ export default {
     }
   },
   created() {
-    var vueInstance = this
-    const axiosInstance = vueInstance.$buildAxiosInstance()
-    vueInstance.toggleLoading(true)
-    axiosInstance.get('/golf/getAll/6/true').then(response => {
-      response.data._embedded.golfClassResources.forEach(c => {
-        c.weekDate = "六"
-        vueInstance.courses_sat.push(c)
-      })
-      vueInstance.courses_sat = vueInstance.courses_sat.sort(function (a, b) {
-        return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
-      });
-      vueInstance.toggleLoading(false)
-    }).catch(error => {
-        console.log(error)
-        vueInstance.toggleLoading(false)
-        vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-    })
-
-    axiosInstance.get('/golf/getAll/0/true').then(response => {
-      response.data._embedded.golfClassResources.forEach(c => {
-        c.weekDate = "日"
-        vueInstance.courses_sun.push(c)
-      })
-      vueInstance.courses_sun = vueInstance.courses_sun.sort(function (a, b) {
-        return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
-      });
-      vueInstance.toggleLoading(false)
-    }).catch(error => {
-      console.log(error)
-      vueInstance.toggleLoading(false)
-      vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-    })
+    getClass(this)
   },
   computed: {
     confirm_disabled() {
@@ -106,21 +75,7 @@ export default {
         axiosInstance.put('/golf/update/' + vueInstance.name, JSON.stringify(data)).then(response => {
           vueInstance.toggleLoading(false)
           vueInstance.$showDialog(vueInstance, response.data.content)
-
-          const axiosInstance = vueInstance.$buildAxiosInstance()
-          axiosInstance.get('/golf/getAll/Sat/').then(response => {
-            vueInstance.courses_sat = response.data._embedded.golfClassResources
-            axiosInstance.get('/golf/getAll/Sun/').then(response => {
-              vueInstance.courses_sun = response.data._embedded.golfClassResources
-            }).catch(error => {
-                console.log(error)
-                vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-            })
-          }).catch(error => {
-              console.log(error)
-              vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
-          })
-
+          getClass(vueInstance)
         }).catch(error => {
           console.log(error)
           vueInstance.toggleLoading(false)
@@ -129,6 +84,43 @@ export default {
       }
     }
   }
+}
+
+// eslint-disable-next-line no-unused-vars
+function getClass(vueInstance) {
+  vueInstance.courses_sat = []
+  vueInstance.courses_sun = []
+  const axiosInstance = vueInstance.$buildAxiosInstance()
+  vueInstance.toggleLoading(true)
+  axiosInstance.get('/golf/getAll/6/true').then(response => {
+    response.data._embedded.golfClassResources.forEach(c => {
+      c.weekDate = "六"
+      vueInstance.courses_sat.push(c)
+    })
+    vueInstance.courses_sat = vueInstance.courses_sat.sort(function (a, b) {
+      return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
+    });
+    vueInstance.toggleLoading(false)
+  }).catch(error => {
+      console.log(error)
+      vueInstance.toggleLoading(false)
+      vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+  })
+
+  axiosInstance.get('/golf/getAll/0/true').then(response => {
+    response.data._embedded.golfClassResources.forEach(c => {
+      c.weekDate = "日"
+      vueInstance.courses_sun.push(c)
+    })
+    vueInstance.courses_sun = vueInstance.courses_sun.sort(function (a, b) {
+      return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
+    });
+    vueInstance.toggleLoading(false)
+  }).catch(error => {
+    console.log(error)
+    vueInstance.toggleLoading(false)
+    vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+  })
 }
 </script>
 
