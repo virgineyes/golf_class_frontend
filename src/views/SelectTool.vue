@@ -2,8 +2,8 @@
   <div class="hello">
     <img id="logo" alt="logo" src="../assets/logo.png">
     <h1>{{ msg }}</h1>
-    <p style="color:red">2/23(三)中午 12:00 開放登記(每人至少 2 次、至多 4 次); 若欲下場超過 4 次者，如有餘額，可於第二階段登記，第二階段開放登記時間為 2/25(三) 中午 12:00</p>
-    <p>*課程費用已包含 2 次實戰課費用，登記超過 2 次者，每次費用為 2800 元(含大九洞果嶺費)</p>
+    <p style="color:red">{{ title }}</p>
+    <p>{{ subTitle }}</p>
     
     <div >
       <span>姓名：</span>
@@ -40,11 +40,14 @@ export default {
       checkList: [],
       checked: [],
       courses_sat: [],
-      courses_sun: []
+      courses_sun: [],
+      title: '',
+      subTitle: ''
     }
   },
   created() {
     getClass(this)
+    getTitle(this)
   },
   computed: {
     confirm_disabled() {
@@ -93,6 +96,7 @@ function getClass(vueInstance) {
   const axiosInstance = vueInstance.$buildAxiosInstance()
   vueInstance.toggleLoading(true)
   axiosInstance.get('/golf/getAll/6/true').then(response => {
+    vueInstance.toggleLoading(false)
     response.data._embedded.golfClassResources.forEach(c => {
       c.weekDate = "六"
       vueInstance.courses_sat.push(c)
@@ -100,7 +104,6 @@ function getClass(vueInstance) {
     vueInstance.courses_sat = vueInstance.courses_sat.sort(function (a, b) {
       return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
     });
-    vueInstance.toggleLoading(false)
   }).catch(error => {
       console.log(error)
       vueInstance.toggleLoading(false)
@@ -108,6 +111,7 @@ function getClass(vueInstance) {
   })
 
   axiosInstance.get('/golf/getAll/0/true').then(response => {
+    vueInstance.toggleLoading(false)
     response.data._embedded.golfClassResources.forEach(c => {
       c.weekDate = "日"
       vueInstance.courses_sun.push(c)
@@ -115,11 +119,24 @@ function getClass(vueInstance) {
     vueInstance.courses_sun = vueInstance.courses_sun.sort(function (a, b) {
       return new Date(a.classDate) > new Date(b.classDate) ? 1 : -1;
     });
-    vueInstance.toggleLoading(false)
   }).catch(error => {
     console.log(error)
     vueInstance.toggleLoading(false)
     vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+  })
+}
+
+function getTitle() {
+  const axiosInstance = vueInstance.$buildAxiosInstance()
+  vueInstance.toggleLoading(true)
+  axiosInstance.get('/title/selectTool').then(response => {
+    vueInstance.toggleLoading(false)
+    vueInstance.title = response.data._embedded.titleResources.title
+    vueInstance.subTitle = response.data._embedded.titleResources.subTitle
+  }).catch(error => {
+      console.log(error)
+      vueInstance.toggleLoading(false)
+      vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
   })
 }
 </script>

@@ -6,6 +6,19 @@
     </h1>
     <div class="flex-container">
       <div id="box">
+        <span>標題：</span>
+        <el-input v-model="title" placeholder="請輸入標題"></el-input>
+      </div>
+      <div id="box">
+        <span>副標題：</span>
+        <el-input v-model="subTitle" placeholder="請輸入副標題"></el-input>
+      </div>
+      <div id="box">>
+        <el-button type="success" @click="addTitle">新增標題</el-button>
+      </div>
+    </div>
+    <div class="flex-container">
+      <div id="box">
         <span>日期：</span>
         <el-date-picker
           @change="selectClassDate"
@@ -55,7 +68,9 @@ export default {
       coach: "",
       remindAccount: "",
       weekDate: "",
-      classes: []
+      classes: [],
+      title: '',
+      subTitle: ''
     };
   },
   created() {
@@ -80,7 +95,7 @@ export default {
         this.$showErrorDialog(this, "請輸入教練姓名")
       } else if (this.remindAccount == "") {
         this.$showErrorDialog(this, "請輸入數量")
-     }  else if (this.weekDate != 6 && this.weekDate != 0) {
+      }  else if (this.weekDate != 6 && this.weekDate != 0) {
         this.$showErrorDialog(this, "日期只能選周六與周日")
       } else {
         var vueInstance = this
@@ -108,6 +123,23 @@ export default {
             vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
         })
       }
+    },
+    addTitle() {
+      var vueInstance = this
+        const axiosInstance = vueInstance.$buildAxiosInstance()
+        vueInstance.toggleLoading(true)
+        axiosInstance.post('title/add', JSON.stringify({
+          pageName: "selectTool",
+          title: this.title,
+          subTitle: this.subTitle
+        })).then(response => {
+          vueInstance.toggleLoading(false)
+          console.log(response)
+        }).catch(error => {
+            console.log(error)
+            vueInstance.toggleLoading(false)
+            vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+        })
     },
     deleteClass(index, row) {
       var vueInstance = this
