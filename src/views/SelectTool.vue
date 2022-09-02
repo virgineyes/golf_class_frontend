@@ -131,8 +131,9 @@ function getTitle(vueInstance) {
   vueInstance.toggleLoading(true)
   axiosInstance.get('/title/selectTool').then(response => {
     vueInstance.toggleLoading(false)
-    vueInstance.title = response.data._embedded.titleResources.title
-    vueInstance.subTitle = response.data._embedded.titleResources.subTitle
+    console.log(response)
+    vueInstance.title = response.data.title
+    vueInstance.subTitle = response.data.subTitle
   }).catch(error => {
       console.log(error)
       vueInstance.toggleLoading(false)
