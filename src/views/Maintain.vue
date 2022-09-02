@@ -4,18 +4,16 @@
     <h1>
       <el-button type="primary" @click="router">前往報表</el-button>
     </h1>
-    <div class="flex-container">
-      <div id="box">
-        <span>標題：</span>
-        <el-input v-model="title" placeholder="請輸入標題"></el-input>
-      </div>
-      <div id="box">
-        <span>副標題：</span>
-        <el-input v-model="subTitle" placeholder="請輸入副標題"></el-input>
-      </div>
-      <div id="box">>
-        <el-button type="success" @click="addTitle">新增標題</el-button>
-      </div>
+    <div id="title">
+      <span>主標題：</span>
+      <el-input v-model="title" placeholder="請輸入標題" style="width:800px;" type="textarea"></el-input>
+    </div>
+    <div id="title">
+      <span>副標題：</span>
+      <el-input v-model="subTitle" placeholder="請輸入副標題" style="width:800px" type="textarea"></el-input>
+    </div>
+    <div id="title">
+      <el-button type="success" @click="addTitle">更新標題</el-button>
     </div>
     <div class="flex-container">
       <div id="box">
@@ -75,6 +73,7 @@ export default {
   },
   created() {
     getAllClass(this)
+    getTitle(this)
   },
   computed: {
     isClasses() {
@@ -163,6 +162,7 @@ export default {
       this.$router.push('report')
     }
   },
+  
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -185,6 +185,21 @@ function getAllClass(vueInstance) {
       vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
   })
 }
+
+function getTitle(vueInstance) {
+  const axiosInstance = vueInstance.$buildAxiosInstance()
+  vueInstance.toggleLoading(true)
+  axiosInstance.get('/title/selectTool').then(response => {
+    vueInstance.toggleLoading(false)
+    console.log(response)
+    vueInstance.title = response.data.title
+    vueInstance.subTitle = response.data.subTitle
+  }).catch(error => {
+      console.log(error)
+      vueInstance.toggleLoading(false)
+      vueInstance.$showErrorDialog(vueInstance, error.response.data.message)
+  })
+}
 </script>
 
 <style scoped>
@@ -195,6 +210,10 @@ function getAllClass(vueInstance) {
 
 #box {
   text-align: left;
+  margin: 15px;
+}
+
+#title {
   margin: 15px;
 }
 
