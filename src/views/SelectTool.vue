@@ -126,7 +126,7 @@ function getClass(vueInstance) {
   })
 }
 
-function getTitle() {
+function getTitle(vueInstance) {
   const axiosInstance = vueInstance.$buildAxiosInstance()
   vueInstance.toggleLoading(true)
   axiosInstance.get('/title/selectTool').then(response => {
@@ -158,3 +158,4 @@ function getTitle() {
     width: 180px;
   }
 </style>
+
